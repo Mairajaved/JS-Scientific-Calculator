@@ -1,26 +1,21 @@
-// function getNum(num) {
-//   document.getElementById("result").value += num;
-// }
 
 function getNum(num) {
   var resultInput = document.getElementById("result");
 
   if (num === "Math.sin") {
-    resultInput.value = "sin";
+    resultInput.value = resultInput.value.replace(/(.*)/, "sin");
   } else if (num === "Math.cos") {
-    resultInput.value = "cos";
-  } else if (num === "Math.tan") {
-    resultInput.value = "tan";
-  } else if (num === "Math.PI") {
-    resultInput.value = "\u03C0";
-  } else if (num === "Math.log") {
-    resultInput.value = "log";
-  } else if (num === "Math.exp") {
-    resultInput.value = "e";
-  } else if (num === "Math.sqrt") {
-    resultInput.value = "\u221A";
+    resultInput.value = resultInput.value.replace(/(.*)/, "cos");
   } else if (num === "Math.E") {
-    resultInput.value = "E";
+    resultInput.value = resultInput.value.replace(/(.*)/, "E");
+  } else if (num === "Math.tan") {
+    resultInput.value = resultInput.value.replace(/(.*)/, "tan");
+  } else if (num === "Math.PI") {
+    resultInput.value = resultInput.value.replace(/(.*)/, "π");
+  } else if (num === "Math.log") {
+    resultInput.value = resultInput.value.replace(/(.*)/, "log");
+  } else if (num === "Math.exp") {
+    resultInput.value = resultInput.value.replace(/(.*)/, "exp");
   } else if (num === "square") {
     var inputValue = parseFloat(resultInput.value);
     var squaredValue = inputValue * inputValue;
@@ -29,6 +24,8 @@ function getNum(num) {
     var inputValue = parseFloat(resultInput.value);
     var cubedValue = inputValue * inputValue * inputValue;
     resultInput.value = cubedValue;
+  } else if (num === "Math.sqrt") {
+    resultInput.value = "√";
   } else {
     resultInput.value += num;
   }
@@ -48,7 +45,6 @@ function getResults() {
   var resultInput = document.getElementById("result");
   var expression = resultInput.value;
 
-  // Handle pi (π) button
   if (expression === "π") {
     resultInput.value = Math.PI;
   } else if (expression === "square") {
@@ -59,15 +55,18 @@ function getResults() {
     var inputValue = parseFloat(resultInput.value);
     var cubedValue = inputValue * inputValue * inputValue;
     resultInput.value = cubedValue;
+  } else if (expression === "√") {
+    var inputValue = parseFloat(resultInput.value);
+    var squareRootValue = Math.sqrt(inputValue);
+    resultInput.value = squareRootValue;
   } else {
-    // calculation using eval() function
-    var result = eval(expression);
-    resultInput.value = result;
+    try {
+      var result = eval(expression);
+      resultInput.value = result;
+    } catch (error) {
+      resultInput.value = "Error";
+    }
   }
 }
 
-// function getResults() {
-//   document.getElementById("result").value = eval(
-//     document.getElementById("result").value
-//   );
-// }
+
