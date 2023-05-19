@@ -1,72 +1,63 @@
+document.addEventListener("DOMContentLoaded", function () {
+  const display = document.getElementById("calc-display");
+  const buttons = document.getElementsByClassName("btn");
 
-function getNum(num) {
-  var resultInput = document.getElementById("result");
+  let currentValue = "";
 
-  if (num === "Math.sin") {
-    resultInput.value = resultInput.value.replace(/(.*)/, "sin");
-  } else if (num === "Math.cos") {
-    resultInput.value = resultInput.value.replace(/(.*)/, "cos");
-  } else if (num === "Math.E") {
-    resultInput.value = resultInput.value.replace(/(.*)/, "E");
-  } else if (num === "Math.tan") {
-    resultInput.value = resultInput.value.replace(/(.*)/, "tan");
-  } else if (num === "Math.PI") {
-    resultInput.value = resultInput.value.replace(/(.*)/, "π");
-  } else if (num === "Math.log") {
-    resultInput.value = resultInput.value.replace(/(.*)/, "log");
-  } else if (num === "Math.exp") {
-    resultInput.value = resultInput.value.replace(/(.*)/, "exp");
-  } else if (num === "square") {
-    var inputValue = parseFloat(resultInput.value);
-    var squaredValue = inputValue * inputValue;
-    resultInput.value = squaredValue;
-  } else if (num === "cube") {
-    var inputValue = parseFloat(resultInput.value);
-    var cubedValue = inputValue * inputValue * inputValue;
-    resultInput.value = cubedValue;
-  } else if (num === "Math.sqrt") {
-    resultInput.value = "√";
-  } else {
-    resultInput.value += num;
+  function evaluateResult() {
+    // Function to evaluate the current expression in the display
+
+    // Perform replacements to convert special symbols or functions to JavaScript syntax
+    const convertedValue = currentValue
+      .replace("×", "*")
+      .replace("÷", "/")
+      .replace("%", "*0.01")
+      .replace("sin", "Math.sin")
+      .replace("cos", "Math.cos")
+      .replace("ln", "Math.log")
+      .replace("π", "Math.PI")
+      .replace("log", "Math.log10")
+      .replace("e", "Math.E")
+      .replace("tan", "Math.tan")
+      .replace("√", "Math.sqrt")
+      .replace("^", "**");
+
+    const result = eval(convertedValue);
+    currentValue = result.toString();
+    display.value = currentValue;
   }
-}
 
-function clearNum() {
-  document.getElementById("result").value = "";
-}
+  for (let i = 0; i < buttons.length; i++) {
+    const button = buttons[i];
+    button.addEventListener("click", function () {
+      const value = button.innerText;
 
-function removeNumb() {
-  var res = document.getElementById("result").value;
-  document.getElementById("result").value = document
-    .getElementById("result")
-    .value.slice(0, res.length - 1);
-}
-function getResults() {
-  var resultInput = document.getElementById("result");
-  var expression = resultInput.value;
-
-  if (expression === "π") {
-    resultInput.value = Math.PI;
-  } else if (expression === "square") {
-    var inputValue = parseFloat(resultInput.value);
-    var squaredValue = inputValue * inputValue;
-    resultInput.value = squaredValue;
-  } else if (expression === "cube") {
-    var inputValue = parseFloat(resultInput.value);
-    var cubedValue = inputValue * inputValue * inputValue;
-    resultInput.value = cubedValue;
-  } else if (expression === "√") {
-    var inputValue = parseFloat(resultInput.value);
-    var squareRootValue = Math.sqrt(inputValue);
-    resultInput.value = squareRootValue;
-  } else {
-    try {
-      var result = eval(expression);
-      resultInput.value = result;
-    } catch (error) {
-      resultInput.value = "Error";
-    }
+      try {
+        if (value === "C") {
+          // Clear the display if AC button is clicked
+          currentValue = "";
+          display.value = currentValue;
+        } else if (value === "=") {
+          // Evaluate the expression if = button is clicked
+          evaluateResult();
+        } else if (value === "⌫") {
+          // Delete the last character if ⌫ button (Delete key) is clicked
+          currentValue = currentValue.slice(0, -1);
+          display.value = currentValue;
+        } else if (value === "^") {
+          // Append the power operator (^) to the current expression
+          currentValue += "**";
+          display.value = currentValue;
+        } else {
+          // Append the clicked button's value to the current expression
+          currentValue += value;
+          display.value = currentValue;
+        }
+      } catch (error) {
+        console.error(error);
+        currentValue = "ERROR";
+        display.value = currentValue;
+      }
+    });
   }
-}
-
-
+});
